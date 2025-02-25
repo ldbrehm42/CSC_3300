@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <meta name="apple-mobile-web-app-capable" content="yes"> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <title>Weather</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="https://github.com/ldbrehm42/CSC_3300/blob/main/Wicon.jpg"> 
+    <link rel="apple-touch-icon" href="https://github.com/ldbrehm42/CSC_3300/blob/main/Wicon.jpg"> 
+    <link rel="apple-touch-icon" sizes="60x60" href="https://github.com/ldbrehm42/CSC_3300/blob/main/Wicon.jpg"> 
+    <link rel="apple-touch-icon" sizes="114x114" href="https://github.com/ldbrehm42/CSC_3300/blob/main/Wicon.jpg"> 
+    <link rel="apple-touch-icon" sizes="144x144" href="https://github.com/ldbrehm42/CSC_3300/blob/main/Wicon.jpg"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+   
+    
+</head>
+<body class="bg-dark">
+    <form class="card col-md-8 offset-md-1 col-lg-6 offset-lg-2 bg-dark" id="HomeScreen" style="max-width: 80%;">
+        <div class="card-body" id="Icon">
+            <img src="Wicon.jpg" alt="Weather app icon" style="max-width: 20%;">
+        </div>
+    </form>
+    <form class="card col-12 offset-0 col-md-8 offset-md-2 col-lg-6 offset-lg-3 bg-dark text-center" id="WeatherDataScreen" style="display:none">
+        <div class="card-body" id="WeatherTitle">
+            <H1 class="text-center mt-1 mb-0 text-primary" aria-label="Page Title">Swollen Hippo Weather</H1>
+        </div>
+        <i id="weatherIcon" class="text-center bi bi-brightness-alt-high-fill text-white mt-0 mb-0" style="font-size: 100px; height: auto;" aria-label="weather Icon"></i>>
+        <h7 id="WeatherDescription" class="text-white mt-0 mb-0 text-center" aria-label="text: weather descrpition"></h7>
+    </form>
+    <form class="card col-12 offset-0 offset-md-2 col-lg-6 offset-lg-3 bg-dark" id="TempScreen" style="display:none">
+        <div class="card-body" id="TempCard">
+            <H5 class="text-white mt-3" aria-label="subHeading: Outside Temp">Outside Temp</H3>
+            <i id="TempImg" class="bi bi-thermometer-half text-white" style="height: 50" aria-label="Thermometer Icon"><p id="Temp" class="text-white" aria-label="text: label"></p></i>
+        </div>
+    </form>
+    <form class="card col-12 offset-0 col-md-8 offset-md-2 col-lg-6 offset-lg-3 bg-dark" id="HumidScreen" style="display:none">
+        <div class="card-body" id="HumidityCard">
+            <H5 class="text-white mt-3" aria-label="subHeading: Humidity">Humidity</H3>
+                <i id="HumidityImg" class="bi bi-moisture text-white" style="height: 50" aria-label="Humidity Icon"><p id="Humidity" class="test-white" aria-label="text: Humidity"></p></i> 
+        </div>
+    </form>
+    <form class="card col-12 offset-0 col-md-8 offset-md-2 col-lg-6 offset-lg-3 bg-dark" id="credits" style="display:none">
+        <div class="card-body mt-5" id="WeatherTitle">
+            <H7 class="text-center mt-1 text-white" aria-label="text: credit to Open Meta">Weather data coutasey of Open Meta</H7>
+        </div>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="http://www.w3.org/2000/svg"></script> 
+    <script>
+       
+       //define variables for weatherIcon
+        let DataTemp
+        let DataTempUnit
+        let DataHum
+        let DataHumUnit
+        let DataSnow
+        let DataSnowUnit
+        let DataRain
+        let DataRainUnit
+        let DataCloud
+        let DataCloudUnit
+
+     //  pull data from API source 
+        fetch('https://api.open-meteo.com/v1/forecast?latitude=36.1628&longitude=-85.5016&current=temperature_2m,relative_humidity_2m,rain,snowfall,cloud_cover&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago')
+        .then(objResponse => objResponse.json())
+        .then(objData => {
+            //store data from API
+            DataTemp = objData.current.temperature_2m; //store temp value
+            DataTempUnit = objData.current_units.temperature_2m; //store Temp units
+
+            DataHum = objData.current.relative_humidity_2m; //store Humidity value
+            DataHumUnit = objData.current_units.relative_humidity_2m;
+
+            DataSnow = objData.current.snowfall;    // store snow value
+            DataSnowUnit = objData.current_units.snowfall;
+
+            DataRain = objData.current.rain;    // store rain value
+            DataRainUnit = objData.current_units.rain;
+
+            DataCloud = objData.current.cloud_cover;    //store cloud vlaue
+            DataCloudUnit = objData.current_units.cloud_cover;
+
+            document.querySelector('#Temp').innerHTML += DataTemp + DataTempUnit //assign temp value+unit with ID
+            document.querySelector('#Humidity').innerHTML += DataHum + DataHumUnit //assign Humidity value+unit with ID
+            
+       // assing an image to display:
+            if(DataRain > 0){  // rainfall is in inches, so if there are currently more than 0in, it's raining
+                document.querySelector("#weatherIcon").className +="bi bi-cloud-drizzle text-white mt-0 mb-0 text-center"  // adds rain icon to class
+                document.querySelector("#weatherIcon").AltName +="Black and white cloud with rain drops below"  // alt name for icon
+                document.querySelector("#WeatherDescription").innerHTML = "It is raining. Stay dry!";   // visable description below image
+            }
+            else if(DataSnow > 0){  // snowfall is in inches, so if there are currently more than 0in, it's raining
+                document.querySelector("#weatherIcon").className ="bi bi-cloud-snow text-white mt-0 mb-0 text-center"
+                document.querySelector("#weatherIcon").AltName +="Black and white cloud with snowflake below"
+                document.querySelector("#WeatherDescription").innerHTML = "It is Snowing. Go build a Snowman!";
+            }
+            else if(DataCloud > 10){    // cloud cover is in % so if above 10% it's cloudy
+                document.querySelector("#weatherIcon").className ="bi bi-cloud-fill text-white mt-0 mb-0 text-center"
+                document.querySelector("#weatherIcon").AltName +="Black and white cloud"
+                document.querySelector("#WeatherDescription").innerHTML = "It's cloudy, so pretend it's normal.";
+            }
+            else {  // if it's not raining, snowing, or cloudy, then it's sunny:
+                document.querySelector("#weatherIcon").className +="bi bi-brightness-alt-high-fill text-white mt-0 mb-0 text-center"
+                document.querySelector("#weatherIcon").AltName +="top half of Sun with rays"
+                document.querySelector("#WeatherDescription").innerHTML = "It's nice and sunny. Get some rays!";
+            }
+        
+            console.log("Data coutasey of Open Meta");
+        })
+            
+            
+        
+
+
+       
+       // verify Username using JS with Query selector
+        document.querySelector("#Icon").addEventListener("click", (e) => {
+
+            open("https://ldbrehm42.github.io/CSC_3300/")
+    
+        // sequence to swap app homescreen and webpage
+        $('#Icon').on('click',function(){
+            $('#HomeScreen').slideUp('slow')  // removes Homescreen Icon
+            $('#WeatherDataScreen').slideDown('fast') // loads title+icon
+            $('#TempScreen').slideDown('fast') // loads title+icon
+            $('#HumidScreen').slideDown('fast') // loads title+icon
+            $('#credits').slideDown('fast') // loads title+icon
+
+        })
+
+
+        // sequence to swap to the Registration Display card
+        $('#WeatherDataScreen').on('click',function(){
+            $('#WeatherDataScreen').slideUp('slow') // removes the Login card 
+            $('#TempScreen').slideUp('slow') // removes the Login card 
+            $('#HumidScreen').slideUp('slow') // removes the Login card 
+            $('#credits').slideUp('slow') // removes the Login card 
+            $('#HomeScreen').slideDown('slow') // loads the Registration card
+        })
+
+    })
+
+// Generative AI platform: aitubo was used to generate the app homescreen icon (same link as DALL-E, but different?)
+// Chat GPT was used to remind myself else if is important (debugging)
+// Chat GPT or stackOverflow (don't remember which) was used to figure out how to set the size of an icon
+// stack overflow was used to partially figure out how to assign a body element's class from script section
+
+    </script>
+</html>
